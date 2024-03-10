@@ -1,0 +1,12 @@
+export const Page = {
+  INITIAL: 'INITIAL',
+  HOME: 'HOME',
+  DETAIL: 'DETAIL',
+  SIGN_IN: 'SIGN_IN',
+  SIGN_UP: 'SIGN_UP',
+  USER_INFO: 'USER_INFO',
+  STATISTICS: 'STATISTICS',
+  LOADING: 'LOADING',
+  LOGIN: 'LOGIN',
+  INPUT: 'INPUT',
+} as const;
