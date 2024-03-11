@@ -5,7 +5,7 @@ import RootStackPramsList from '@src/routes/Params/stacks';
 import { Page } from '@src/constants/path';
 import { useNavigation } from '@react-navigation/native';
 import { AppColor } from '@src/constants/theme';
-import AppTodos, { AppTodo } from '@src/components/organisms/AppTodos';
+import AppTodos, { AppTodo, State as AppTodosState } from '@src/components/organisms/AppTodos';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
@@ -34,27 +34,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const todos = [
-  {
-    id: '1',
-    title: 'Todo',
-    detail: 'to do',
-    isDone: false,
-  },
-  {
-    id: '2',
-    title: 'Done',
-    detail: 'done task',
-    isDone: true,
-  },
-];
+interface HomeProps {
+  todos: AppTodosState;
+  actions: {
+    toggleTodo: AppTodo.DoneButton.ToggleTodo;
+    removeTodo: AppTodo.DeleteButton.RemoveTodo;
+  };
+}
 
 type HomeNavigationProps = StackNavigationProp<RootStackPramsList, 'HOME'>;
-const Home = () => {
+const Home = (props: HomeProps) => {
   const navigation = useNavigation<HomeNavigationProps>();
 
   useEffect(() => {
     console.log('@@@ mount page home @@@');
+    console.log(props);
 
     return () => {
       console.log('@@@ dismount page home @@@');
@@ -74,18 +68,17 @@ const Home = () => {
 
   const actions = useMemo(
     () => ({
-      removeTodo: () => {},
-      toggleTodo: () => {},
+      ...props.actions,
       gotoDetail,
     }),
-    [gotoDetail]
+    [gotoDetail, props.actions]
   );
 
   return (
-    <View style={styles.container}>
-      <AppTodos isEditable todos={todos} actions={{ ...actions, gotoDetail }} />
-      <TouchableOpacity onPress={onPress} style={styles.button}>
-        <Icon color={AppColor.PRIMARY} name="plus" size={24} />
+    <View style={styles.container} testID="HOME">
+      <AppTodos isEditable todos={props.todos} actions={actions} />
+      <TouchableOpacity onPress={onPress} style={styles.button} testID="TODO_OPEN_INPUT_BUTTON">
+        <Icon color={AppColor.PRIMARY} size={24} name="plus" />
       </TouchableOpacity>
     </View>
   );
